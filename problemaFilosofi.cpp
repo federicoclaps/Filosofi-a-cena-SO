@@ -11,6 +11,10 @@ const int PENSA = 0;
 const int MANGIA = 1;
 const int AFFAMATO = 2;
 
+<<<<<<< HEAD
+
+=======
+>>>>>>> 89dca570331378fd639f0e320caa01328e9e86fc
 
 void schermataIniziale();
 void inizializza();
@@ -29,4 +33,10 @@ void schermataIniziale(){
 	cout << "**** PROBLEMA DEI FILOSOFI A CENA ****" << endl;
 	cout << "*  Corso di Sistemi Operativi        *" << endl;
 	return;
+}
+
+// metodo per la generazione automatica di intervalli di tempo (in ms)
+int generaDurataInMs(int min, int max){
+	int durataCasuale = rand () % min + max;
+    return durataCasuale;
 }
