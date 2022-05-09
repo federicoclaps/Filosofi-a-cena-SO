@@ -13,11 +13,14 @@ const int AFFAMATO = 2;
 
 
 void schermataIniziale();
+void inizializza();
 
 int main()
 {
 	int numForchette = NUMERO_FILOSOFI;
+	inizializza();
 	schermataIniziale();
+	
 
 	return 0;
 }
