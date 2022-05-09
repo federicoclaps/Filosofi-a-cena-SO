@@ -5,6 +5,8 @@
 using namespace std;
 
 int const NUMERO_FILOSOFI = 4;
+pthread_t filosofi[NUMERO_FILOSOFI];
+int statoFilosofo[NUMERO_FILOSOFI];
 
 // identificatore di thread
 pthread_t filosofi[NUMERO_FILOSOFI];
