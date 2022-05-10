@@ -5,10 +5,10 @@
 
 using namespace std;
 
-int const NUMERO_FILOSOFI = 4;
+int const NUMERO_FILOSOFI = 5;
 
 int statoFilosofo[NUMERO_FILOSOFI];
-sem_t S = NUMERO_FILOSOFI; //dichiarazione semaforo binario (ogni filosofo ha un semaforo)
+sem_t S = 5; //dichiarazione semaforo binario (ogni filosofo ha un semaforo)
 pthread_t filosofi[NUMERO_FILOSOFI]; //dichiarazione array di thread di filosofi 
 const int PENSA = 0;
 const int MANGIA = 1;
@@ -34,7 +34,7 @@ int main(){
 	inizializza();
 	schermataIniziale();
 	while(true){
-		creaThread(NUMERO_FILOSOFI, numForchette);
+		creaThread(filosofi);
 	}
 	return 0;
 }
