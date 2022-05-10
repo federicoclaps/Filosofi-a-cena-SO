@@ -21,7 +21,8 @@ void creaThread(pthread_t filosofi, int &numForchette);
 int generaDurataInMs(int min, int max);
 int filosofoDestro(int i);
 int filosofoSinistro(int i);
-void prendiForchetta(int i, int *numForchette);
+void prendiForchette(int i, int *numForchette);
+void filosofo(int i);
 
 void wait(int& s);
 
@@ -77,8 +78,6 @@ int filosofoSinistro(int i){
 	return (i + NUMERO_FILOSOFI - 1) % NUMERO_FILOSOFI;    
 }
 
-
-
 void filosofoStaMangiando(int i, int *numForchette){
 	int destro = filosofoDestro(i);
 	int sinistro = filosofoSinistro(i);
@@ -88,14 +87,29 @@ void filosofoStaMangiando(int i, int *numForchette){
 	}
 }
 
-void prendiForchetta(int i, int *numForchette){
+void prendiForchette(int i, int *numForchette){
 	statoFilosofo[i] = AFFAMATO;
 	cout << "Il filosofo in pos: " + i + " e' affamato";
 	filosofoStaMangiando[i];
 	
 }
 
+void rilasciaForchette(int i){
+	statoFilosofo[i] = PENSA;
+	int sinistro = filosofoSinistro(i);
+	int destro = filosofoDestro(i);
+	filosofoStaMangiando(sinistro);
+	filosofoStaMangiando(destro);
+}
 
+void filosofo(int i) { 
+  while (true) {          
+    pensa(i);             
+    prendiForchette(i);        
+    mangia(i);               
+    rilasciaForchette(i);         
+  }
+}
 
 void wait(int& s){
 	while(s < 0)
