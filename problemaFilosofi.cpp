@@ -17,7 +17,7 @@ const int AFFAMATO = 2;
 
 void schermataIniziale();
 void inizializza();
-void creaThread(pthread_t filosofi);
+void creaThread(pthread_t* filosofi);
 int generaDurataInMs(int min, int max);
 int filosofoDestro(int i);
 int filosofoSinistro(int i);
@@ -49,7 +49,7 @@ void inizializza(){
 }
 
 //Metodo crea thread per tutti i filosofi
-void creaThread(pthread_t filosofi[NUMERO_FILOSOFI]){
+void creaThread(pthread_t* filosofi[NUMERO_FILOSOFI]){
 	for(int i = 0; i < NUMERO_FILOSOFI; i++){
 		pthread_create(&filosofi[i], NULL, filosofo, (void *)i);
 	}
