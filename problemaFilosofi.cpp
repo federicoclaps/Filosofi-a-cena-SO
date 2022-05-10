@@ -8,7 +8,7 @@ using namespace std;
 int const NUMERO_FILOSOFI = 4;
 
 int statoFilosofo[NUMERO_FILOSOFI];
-sem_t semaforo_binario s[NUMERO_FILOSOFI]; //dichiarazione semaforo binario (ogni filosofo ha un semaforo)
+sem_t S[NUMERO_FILOSOFI]; //dichiarazione semaforo binario (ogni filosofo ha un semaforo)
 pthread_t filosofi[NUMERO_FILOSOFI]; //dichiarazione array di thread di filosofi 
 const int PENSA = 0;
 const int MANGIA = 1;
@@ -22,9 +22,12 @@ int generaDurataInMs(int min, int max);
 int filosofoDestro(int i);
 int filosofoSinistro(int i);
 void prendiForchette(int i, int *numForchette);
-void filosofo(int i);
-
+void rilasciaForchette(int i, int *numForchette);
+void *filosofo(void *i, int *numForchette);
+void pensa(int i);
+void mangia(int i);
 void wait(int& s);
+void signal(int& s);
 
 int main(){
 	int numForchette = NUMERO_FILOSOFI;
@@ -33,23 +36,22 @@ int main(){
 	while(true){
 		creaThread(NUMERO_FILOSOFI, numForchette);
 	}
-	pensa()
 	return 0;
 }
 
 
 //Metodo che: imposta stato filosofi a pensa e inizializza semafori 
 void inizializza(){
-	sem_init(semaforo_binario, 0,0); //inizializzazione dei semafori
+	sem_init(S, 0,0); //inizializzazione dei semafori
 	for(int i = 0; i < NUMERO_FILOSOFI; i++){
-		statoFilosofo[i] = PENSA:
+		statoFilosofo[i] = PENSA;
 	}
 }
 
 //Metodo crea thread per tutti i filosofi
 void creaThread(pthread_t filosofi[NUMERO_FILOSOFI], int &numForchette){
-	for(pos = 0; pos < NUMERO_FILOSOFI; pos++){
-		pthread_create(&filosofi[i], NULL, filosofo, (*void) i);
+	for(int i = 0; i < NUMERO_FILOSOFI; i++){
+		pthread_create(&filosofi[i], NULL, filosofo, (*void)i);
 	}
 }
 
@@ -89,12 +91,19 @@ void filosofoStaMangiando(int i, int *numForchette){
 
 void prendiForchette(int i, int *numForchette){
 	statoFilosofo[i] = AFFAMATO;
-	cout << "Il filosofo in pos: " + i + " e' affamato";
-	filosofoStaMangiando[i];
+	cout << "Il filosofo in pos: " << i << " e' affamato";
+	filosofoStaMangiando(i, numForchette);	
+}
+
+void pensa(int i){
+
+}
+
+void mangia(int i){
 	
 }
 
-void rilasciaForchette(int i){
+void rilasciaForchette(int i, int *numForchette)){
 	statoFilosofo[i] = PENSA;
 	int sinistro = filosofoSinistro(i);
 	int destro = filosofoDestro(i);
@@ -102,12 +111,12 @@ void rilasciaForchette(int i){
 	filosofoStaMangiando(destro);
 }
 
-void filosofo(int i) { 
+void *filosofo(void *i, int *numForchette) { 
   while (true) {          
-    pensa(i);             
-    prendiForchette(i);        
-    mangia(i);               
-    rilasciaForchette(i);         
+    pensa(*(int*)i);             
+    prendiForchette(*(int*)i, numForchette);        
+    mangia(*(int*)i);               
+    rilasciaForchette(*(int*)i, numForchette);         
   }
 }
 
