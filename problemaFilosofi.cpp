@@ -85,7 +85,7 @@ void filosofoStaMangiando(int i, int *numForchette){
 	int sinistro = filosofoSinistro(i);
 	if( (statoFilosofo[i] == AFFAMATO) && (statoFilosofo[destro] != MANGIA) && (statoFilosofo [sinistro] != MANGIA) ){
 		statoFilosofo[i] = MANGIA;
-		wait(numForchette); 
+		wait(*numForchette); 
 	}
 }
 
@@ -103,11 +103,11 @@ void mangia(int i){
 	
 }
 
-void rilasciaForchette(int i, int *numForchette)){
+void rilasciaForchette(int i, int *numForchette){
 	statoFilosofo[i] = PENSA;
 	int sinistro = filosofoSinistro(i);
 	int destro = filosofoDestro(i);
-	filosofoStaMangiando(sinistro);
+	filosofoStaMangiando(sinistro,*numForchette);
 	filosofoStaMangiando(destro);
 }
 
