@@ -77,7 +77,7 @@ void creaThread()
 void schermataIniziale()
 {
   cout << "**** PROBLEMA DEI FILOSOFI A CENA ****" << endl;
-  cout << "*  Corso di Sistemi Operativi        *" << endl;
+  cout << "*    Corso di Sistemi Operativi      *" << endl;
   cout << "**************************************" << endl;
   return;
 }
