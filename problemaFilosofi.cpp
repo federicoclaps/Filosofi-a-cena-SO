@@ -114,7 +114,9 @@ void pensa(int i){
 }
 
 void mangia(int i){
-
+	int durata  = generaDurataInMs(400,600);
+	cout << "Il filosofo in posizione: " << i << " MANGIA" << "per:" << durata << "(ms)" << endl;
+	usleep(durata);
 }
 
 
