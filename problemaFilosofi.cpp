@@ -42,7 +42,7 @@ int main(){
 
 //Metodo che: imposta stato filosofi a pensa e inizializza semafori 
 void inizializza(){
-	sem_init(S, 0,NUMERO_FILOSOFI); //inizializzazione dei semafori al numero dei filosofi
+	sem_init(&S, 0,NUMERO_FILOSOFI); //inizializzazione dei semafori al numero dei filosofi
 	for(int i = 0; i < NUMERO_FILOSOFI; i++){
 		statoFilosofo[i] = PENSA;
 	}
