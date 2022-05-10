@@ -8,7 +8,7 @@ using namespace std;
 int const NUMERO_FILOSOFI = 5;
 
 int statoFilosofo[NUMERO_FILOSOFI];
-sem_t S; //dichiarazione semaforo binario (ogni filosofo ha un semaforo)
+sem_t S; //dichiarazione semaforo binario (semaforo che rappresenta numero di forchette disponibili)
 pthread_t filosofi[NUMERO_FILOSOFI]; //dichiarazione array di thread di filosofi 
 const int PENSA = 0;
 const int MANGIA = 1;
@@ -31,6 +31,7 @@ void signal(int& s);
 
 int main(){
 	//int numForchette = NUMERO_FILOSOFI;
+	
 	inizializza();
 	schermataIniziale();
 	while(true){
@@ -50,16 +51,16 @@ void inizializza(){
 
 //Metodo crea thread per tutti i filosofi
 void creaThread(pthread_t* filosofi[NUMERO_FILOSOFI]){
-	for(int i = 0; i < NUMERO_FILOSOFI; i++){
+	for(unsigned long i  = 0; i < NUMERO_FILOSOFI; i++){
 		pthread_create(&filosofi[i], NULL, filosofo, (void *)i);
 	}
 }
 
 //Metodo di schermata iniziale
 void schermataIniziale(){
-	cout << "**** PROBLEMA DEI FILOSOFI A CENA ****" << endl;
-	cout << "*  Corso di Sistemi Operativi        *" << endl;
-	cout << "**************************************" << endl;
+	cout << "****   PROBLEMA DEI FILOSOFI A CENA    ****" << endl;
+	cout << "*       Corso di Sistemi Operativi        *" << endl;
+	cout << "******************************************" << endl;
 	return;
 }
 
@@ -82,6 +83,7 @@ int filosofoSinistro(int i){
 }
 
 //Metodo che imposta lo stato a Mangia e rilascia forchetta
+//Questo metodo, inserito all'interno di prendiForchette e rilasciaForchette, evita la situazione di stallo (deadlock)
 void filosofoStaMangiando(int i){
 	int destro = filosofoDestro(i);
 	int sinistro = filosofoSinistro(i);
@@ -91,7 +93,7 @@ void filosofoStaMangiando(int i){
 	}
 }
 
-//Metodo che 
+//Metodo che permette al filosofo di prendere le forchette 
 void prendiForchette(int i){
 	statoFilosofo[i] = AFFAMATO;
 	cout << "Il filosofo in pos: " << i << " e' affamato";
