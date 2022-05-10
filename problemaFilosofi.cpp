@@ -8,7 +8,7 @@ using namespace std;
 int const NUMERO_FILOSOFI = 5;
 
 int statoFilosofo[NUMERO_FILOSOFI];
-sem_t S = 5; //dichiarazione semaforo binario (ogni filosofo ha un semaforo)
+sem_t S; //dichiarazione semaforo binario (ogni filosofo ha un semaforo)
 pthread_t filosofi[NUMERO_FILOSOFI]; //dichiarazione array di thread di filosofi 
 const int PENSA = 0;
 const int MANGIA = 1;
@@ -42,7 +42,7 @@ int main(){
 
 //Metodo che: imposta stato filosofi a pensa e inizializza semafori 
 void inizializza(){
-	sem_init(S, 0,4); //inizializzazione dei semafori a 4
+	sem_init(S, 0,NUMERO_FILOSOFI); //inizializzazione dei semafori al numero dei filosofi
 	for(int i = 0; i < NUMERO_FILOSOFI; i++){
 		statoFilosofo[i] = PENSA;
 	}
