@@ -51,7 +51,7 @@ void inizializza(){
 //Metodo crea thread per tutti i filosofi
 void creaThread(pthread_t filosofi[NUMERO_FILOSOFI], int &numForchette){
 	for(int i = 0; i < NUMERO_FILOSOFI; i++){
-		pthread_create(&filosofi[i], NULL, filosofo, (*void)i);
+		pthread_create(&filosofi[i], NULL, filosofo, (void *)i);
 	}
 }
 
@@ -100,7 +100,7 @@ void pensa(int i){
 }
 
 void mangia(int i){
-	
+
 }
 
 void rilasciaForchette(int i, int *numForchette){
