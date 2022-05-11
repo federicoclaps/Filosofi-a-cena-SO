@@ -95,7 +95,7 @@ void prendiForchette(int i){
   statoFilosofo[i] = AFFAMATO;
   pthread_mutex_lock(&mutexStampa);      //ingresso regione critica
   usleep(1000000);
-  cout << "Il filosofo in pos. " << i << " e' AFFAMATO " << endl;
+  cout << "Il filosofo in posizione: " << i << " E' AFFAMATO " << endl;
   pthread_mutex_unlock(&mutexStampa);    // uscita regione critica
   filosofoStaMangiando(i);
   sem_wait(&S);
@@ -116,7 +116,7 @@ void pensa(int i){
   int durata = generaDurataInMs(400, 600);
   pthread_mutex_lock(&mutexStampa);
   usleep(1000000);
-  cout << "Il filosofo in posizione: " << i << " PENSA "
+  cout << "Il filosofo in posizione: " << i << "  PENSA "
        << " per " << durata << " (ms) " << endl;
   pthread_mutex_unlock(&mutexStampa);
   usleep(durata);
