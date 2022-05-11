@@ -109,8 +109,8 @@ void rilasciaForchette(int i){
   int destro = filosofoDestro(i);
   filosofoStaMangiando(sinistro);
   filosofoStaMangiando(destro);
-  //sem_post(&S);
-  //sem_post(&S);
+  sem_post(&S);
+  sem_post(&S);
 }
 
 void pensa(int i){
@@ -138,7 +138,7 @@ void *filosofo(void *i){
     pensa(threadID);
     prendiForchette(threadID);
     mangia(threadID);
-    rilasciaForchette(threadID);
+    //rilasciaForchette(threadID);
     }
  
 }
