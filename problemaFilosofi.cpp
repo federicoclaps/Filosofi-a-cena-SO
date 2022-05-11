@@ -7,18 +7,18 @@
 using namespace std;
 
 int const NUMERO_FILOSOFI = 5;
+int const PENSA = 0;
+int const MANGIA = 1;
+int const AFFAMATO = 2;
 
 int statoFilosofo[NUMERO_FILOSOFI];
 sem_t S;                             // dichiarazione semaforo binario (ogni filosofo ha un semaforo)
 pthread_t filosofi[NUMERO_FILOSOFI]; // dichiarazione array di thread di filosofi
-pthread_mutex_t mutexStampa;
-const int PENSA = 0;
-const int MANGIA = 1;
-const int AFFAMATO = 2;
+pthread_mutex_t mutexStampa;         // dichiarazione mutex
+
 
 void schermataIniziale();
 void inizializza();
-// void creaThread(pthread_t* filosofi);
 void creaThread();
 int generaDurataInMs(int min, int max);
 int filosofoDestro(int i);
@@ -28,15 +28,11 @@ void rilasciaForchette(int i);
 void *filosofo(void *i);
 void pensa(int i);
 void mangia(int i);
-void wait(int &s);
-void signal(int &s);
 void joinThread();
-void stampaMessaggio(string stringa1, int varInt, string stringa2);
 
-int main()
-{
 
-  // int numForchette = NUMERO_FILOSOFI;
+//Metodo main 
+int main(){
   inizializza();
   schermataIniziale();
   creaThread();
@@ -45,90 +41,68 @@ int main()
 }
 
 // Metodo che: imposta stato filosofi a pensa e inizializza semafori
-void inizializza()
-{
-  pthread_mutex_init(&mutexStampa, NULL);
+void inizializza(){
+  pthread_mutex_init(&mutexStampa, NULL); //inizializzazione del mutex
   sem_init(&S, 0, NUMERO_FILOSOFI); // inizializzazione dei semafori al numero dei filosofi
-  for (int i = 0; i < NUMERO_FILOSOFI; i++)
-  {
+  for (int i = 0; i < NUMERO_FILOSOFI; i++){
     statoFilosofo[i] = PENSA;
   }
 }
 
-
-void creaThread()
-{
-  for (unsigned long i = 0; i < NUMERO_FILOSOFI; i++)
-  {
-    //usleep(1000000);
+void creaThread(){
+  for (unsigned long i = 0; i < NUMERO_FILOSOFI; i++){
     pthread_create(&filosofi[i], NULL, filosofo, (void *)i); 
   }
 }
 
-
 // Metodo di schermata iniziale
-void schermataIniziale()
-{
-  cout << "**** PROBLEMA DEI FILOSOFI A CENA ****" << endl;
-  cout << "*    Corso di Sistemi Operativi      *" << endl;
-  cout << "**************************************" << endl;
+void schermataIniziale(){
+  cout << "* ************************************* *" << endl;
+  cout << "*     PROBLEMA DEI FILOSOFI A CENA      *" << endl;
+  cout << "*       Corso di Sistemi Operativi      *" << endl;
+  cout << "*  FEDERICO CLAPS - GIUSEPPE DI STEFANO *" << endl;
+  cout << "* ************************************* *" << endl;
   return;
 }
 
 // Metodo per la generazione automatica di intervalli di tempo (in ms)
-int generaDurataInMs(int min, int max)
-{
+int generaDurataInMs(int min, int max){
   int durataCasuale = rand() % min + max;
   return durataCasuale;
 }
 
 // Metodo che restituisce il filosofo a destra del filosofo in pos. i
-//  ES: (il filosofo in pos. 5 avrà alla sua desta il filosofo in pos. 1)
-int filosofoDestro(int i)
-{
+int filosofoDestro(int i){
   return (i + 1) % NUMERO_FILOSOFI;
 }
 
 // Metodo che restituisce il filosofo a sinistra del filosofo in pos. i
-// ES: (il filosofo in pos. 5 avrà alla sua sinistra il filosofo in pos. 4)
-int filosofoSinistro(int i)
-{
+int filosofoSinistro(int i){
   return (i + NUMERO_FILOSOFI - 1) % NUMERO_FILOSOFI;
 }
 
-// Metodo che imposta lo stato a Mangia e rilascia forchetta
-//  metodo che inserito all'interno di prendiForchette e rilasciaForchette, impedisce la situazione di stallo
-
-
-void filosofoStaMangiando(int i)
-{
+void filosofoStaMangiando(int i){
   int destro = filosofoDestro(i);
   int sinistro = filosofoSinistro(i);
-  if ((statoFilosofo[i] == AFFAMATO) && (statoFilosofo[destro] != MANGIA) && (statoFilosofo[sinistro] != MANGIA))
-  {
+  if ((statoFilosofo[i] == AFFAMATO) && (statoFilosofo[destro] != MANGIA) && (statoFilosofo[sinistro] != MANGIA)){
     statoFilosofo[i] = MANGIA;
     sem_post(&S);
   }
 }
 
 
-// Metodo che
-
-
-void prendiForchette(int i)
-{
+void prendiForchette(int i){
   statoFilosofo[i] = AFFAMATO;
-  pthread_mutex_lock(&mutexStampa);
+  pthread_mutex_lock(&mutexStampa);      //ingresso regione critica
   usleep(1000000);
   cout << "Il filosofo in pos. " << i << " e' AFFAMATO " << endl;
-  pthread_mutex_unlock(&mutexStampa);
+  pthread_mutex_unlock(&mutexStampa);    // uscita regione critica
   filosofoStaMangiando(i);
   sem_wait(&S);
   sem_wait(&S);
 }
 
-void rilasciaForchette(int i)
-{
+void rilasciaForchette(int i){
   statoFilosofo[i] = PENSA;
   int sinistro = filosofoSinistro(i);
   int destro = filosofoDestro(i);
@@ -138,43 +112,38 @@ void rilasciaForchette(int i)
   sem_post(&S);
 }
 
-void pensa(int i)
-{
+void pensa(int i){
   int durata = generaDurataInMs(400, 600);
-    pthread_mutex_lock(&mutexStampa);
-    usleep(1000000);
+  pthread_mutex_lock(&mutexStampa);
+  usleep(1000000);
   cout << "Il filosofo in posizione: " << i << " PENSA "
        << " per " << durata << " (ms) " << endl;
-    pthread_mutex_unlock(&mutexStampa);
+  pthread_mutex_unlock(&mutexStampa);
   usleep(durata);
 }
  
-void mangia(int i)
-{
+void mangia(int i){
   int durata = generaDurataInMs(400, 600);
-    pthread_mutex_lock(&mutexStampa);
-    usleep(1000000);
-  cout << "Il filosofo in posizione: " << i << " MANGIA "
-       << " per " << durata << " (ms) " << endl;
-    pthread_mutex_unlock(&mutexStampa);
+  pthread_mutex_lock(&mutexStampa);
+  usleep(1000000);
+  cout << "Il filosofo in posizione: " << i << " MANGIA "<< " per " << durata << " (ms) " << endl;
+  pthread_mutex_unlock(&mutexStampa);
   usleep(durata);
 }
 
-void *filosofo(void *i)
-{
+void *filosofo(void *i){
   while (true) {
-  unsigned long threadID = (unsigned long)i;
-  pensa(threadID);
-  prendiForchette(threadID);
-  mangia(threadID);
-  rilasciaForchette(threadID);
+    unsigned long threadID = (unsigned long)i;
+    pensa(threadID);
+    prendiForchette(threadID);
+    mangia(threadID);
+    rilasciaForchette(threadID);
   }
   
 }
 
 void joinThread() {
-  for (unsigned long i = 0; i < NUMERO_FILOSOFI; i++)
-  {
+  for (unsigned long i = 0; i < NUMERO_FILOSOFI; i++){
     pthread_join(filosofi[i], NULL);
   }
 }
